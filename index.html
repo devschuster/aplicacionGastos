@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Aplicación para Gastos</title>
+    
+</head>
+<body>
+    <h1>Mi aplicación para gastos</h1>
+    <form action="" id="transactionForm" name="transactionForm">
+        <div class="formField">
+            Tipo de Transacción
+            <input id="ingreso" type="radio" name="transactionType" value="Ingreso">
+            <label for="ingreso">Ingreso</label>
+            <input id="egreso" type="radio" name="transactionType" value="Egreso">
+            <label for="egreso">Egreso</label>
+        </div>
+        <div class="formField">
+            <label for="transactionDescription">Descripción</label>
+            <input type="text" id="transactionDescription" name="transactionDescription">
+        </div>
+        <div class="formField">
+            <label for="transactionAmount">Monto</label>
+            <input type="number" id="transactionAmount" name="transactionAmount">
+        </div>
+        <div class="formField">
+            <label for="transactionCategory">Categoría</label>
+            <input type="text" id="transactionCategory" name="transactionCategory">
+        </div>
+        <div class="formField">
+            <button id="botonDeEnvio" name="botonDeEnvio">Añadir</button>
+        </div>
+    </form>
+    <div class="tableFormat">
+        <table id="transactionTable">
+            <tbody>
+                <tr>
+                    <th>
+                        Tipo de Transacción
+                    </th>
+                    <th>
+                        Descripción
+                    </th>
+                    <th>
+                        Monto
+                    </th>
+                    <th>
+                        Categoría
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        const form = document.getElementById("transactionForm")
+        form.addEventListener("submit", function(event){
+                event.preventDefault();
+                let transactionFormData = new FormData(form);
+                let transactionObj = convertFormDataToTransactionObject(transactionFormData);
+                saveTransactionObj(transactionObj);
+                insertRowInTransactionTable(transactionObj);
+                form.reset();
+            }
+        )
+
+        document.addEventListener("DOMContentLoaded", function(event){
+            let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"))
+            transactionObjArr.forEach (
+                function(arrayElement){
+                    insertRowInTransactionTable(arrayElement)
+                }
+            )
+        })
+
+        function convertFormDataToTransactionObject(transactionFormData){
+            let transactionType = transactionFormData.get("transactionType")
+            let transactionDescription = transactionFormData.get("transactionDescription")
+            let transactionAmount = transactionFormData.get("transactionAmount")
+            let transactionCategory = transactionFormData.get("transactionCategory");
+            return {
+                "transactionType" : transactionType, 
+                "transactionDescription" : transactionDescription, 
+                "transactionAmount" : transactionAmount, 
+                "transactionCategory" : transactionCategory 
+            }
+        }
+
+        function insertRowInTransactionTable(transactionObj){
+            let transactionTableRef = document.getElementById("transactionTable");
+
+            let newTransactionRowRef = transactionTableRef.insertRow(-1);
+
+            let newTypeCellRef = newTransactionRowRef.insertCell(0);
+            newTypeCellRef.textContent = transactionObj["transactionType"];
+
+            newTypeCellRef = newTransactionRowRef.insertCell(1);
+            newTypeCellRef.textContent = transactionObj["transactionDescription"];
+
+            newTypeCellRef = newTransactionRowRef.insertCell(2);
+            newTypeCellRef.textContent = transactionObj["transactionAmount"];
+
+            newTypeCellRef = newTransactionRowRef.insertCell(3);
+            newTypeCellRef.textContent = transactionObj["transactionCategory"];
+        }
+
+        function saveTransactionObj(transactionObj){
+            let myTransactionArray = JSON.parse(localStorage.getItem("transactionData")) || [];
+            myTransactionArray.push(transactionObj);
+            let transactionObjJSON = JSON.stringify(myTransactionArray);
+            localStorage.setItem("transactionData" , transactionObjJSON)
+        }
+
+    </script>
+</body>
+</html>
