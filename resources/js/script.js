@@ -10,7 +10,7 @@ form.addEventListener("submit", function(event){
     }
 )
 
-document.addEventListener("DOMContentLoaded", function(event){
+document.addEventListener("DOMContentLoaded", function(event) {
     let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"))
     transactionObjArr.forEach (
         function(arrayElement){
@@ -37,7 +37,7 @@ function convertFormDataToTransactionObject(transactionFormData){
         "transactionDescription" : transactionDescription, 
         "transactionAmount" : transactionAmount, 
         "transactionCategory" : transactionCategory,
-        "transactionID" : transactionID
+        "transactionID" : transactionID,
     }
 }
 
@@ -74,7 +74,7 @@ function insertRowInTransactionTable(transactionObj){
 
 function deleteTransactionObj(transactionID){
     let transactionObjArr = JSON.parse(localStorage.getItem("transactionData"));
-    let transactionIndexInArray = transactionObjArr.findIndex(element => element.transactionID === transactionID);
+    let transactionIndexInArray = transactionObjArr.findIndex(element => element.transactionID == transactionID);
     transactionObjArr.splice(transactionIndexInArray, 1);
     let transactionObjJSON = JSON.stringify(transactionObjArr);
     localStorage.setItem("transactionData" , transactionObjJSON)
